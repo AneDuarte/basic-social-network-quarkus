@@ -40,7 +40,10 @@ public class UserResource {
 
         user.persist();
 
-        return Response.ok(user).build();
+        return Response
+                .status(Response.Status.CREATED.getStatusCode())
+                .entity(user)
+                .build();
     }
 
     @GET

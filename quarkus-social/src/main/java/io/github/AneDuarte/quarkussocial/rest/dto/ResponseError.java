@@ -1,12 +1,13 @@
 package io.github.AneDuarte.quarkussocial.rest.dto;
 
 import jakarta.validation.ConstraintViolation;
-
+import lombok.Data;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Data
 public class ResponseError {
     //classe para representar o obj de retorno quando houver erro
     private String message;
@@ -24,23 +25,6 @@ public class ResponseError {
                 .collect(Collectors.toList());
         String message = "Validation Error";
 
-        var responseError = new ResponseError(message, errors);
-        return responseError;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Collection<FieldError> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(Collection<FieldError> errors) {
-        this.errors = errors;
+        return new ResponseError(message, errors);
     }
 }
