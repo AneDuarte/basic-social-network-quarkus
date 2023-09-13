@@ -2,9 +2,11 @@ package io.github.AneDuarte.quarkussocial.rest;
 
 import io.github.AneDuarte.quarkussocial.rest.dto.CreateUserRequest;
 import io.github.AneDuarte.quarkussocial.domain.model.User;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -15,9 +17,22 @@ import java.util.Set;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
+
+    private jakarta.validation.Validator validator;
+
+    @Inject
+    public UserResource(Validator validator) {
+        this.validator = validator;
+    }
+
     @POST
     @Transactional
     public Response createUser( CreateUserRequest userRequest ) {
+        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(userRequest);
+        if (!violations.isEmpty()) {
+            String mensagemErro = violations.stream().findAny().get().getMessage();
+            return Response.status(400).entity(mensagemErro).build();
+        }
 
         User user = new User();
         user.setAge(userRequest.getAge());
