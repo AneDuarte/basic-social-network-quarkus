@@ -56,8 +56,9 @@ public class UserResource {
     @Path("{id}")
     public Response getUserById(@PathParam("id") Long userId) {
         User user = User.findById(userId);
-        if(user != null) return Response.ok(user).build();
-        return Response.status(Response.Status.NOT_FOUND).build();
+        if(user == null) return Response.status(Response.Status.NOT_FOUND).build();
+
+        return Response.ok(user).build();
     }
 
     @PUT
@@ -65,12 +66,11 @@ public class UserResource {
     @Transactional
     public Response updateUser(@PathParam("id") Long userId, CreateUserRequest userData) {
         User user = User.findById(userId);
-        if(user != null) {
-            user.setName(userData.getName());
-            user.setAge(userData.getAge());
-            return Response.ok().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        if (user == null) return Response.status(Response.Status.NOT_FOUND).build();
+
+        user.setName(userData.getName());
+        user.setAge(userData.getAge());
+        return Response.ok().build();
     }
 
     @DELETE
@@ -78,10 +78,9 @@ public class UserResource {
     @Transactional
     public Response deleteUser(@PathParam("id") Long userId) {
         User user = User.findById(userId);
-        if(user != null) {
-            user.delete();
-            return Response.ok().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        if (user == null) return Response.status(Response.Status.NOT_FOUND).build();
+
+        user.delete();
+        return Response.ok().build();
     }
 }
