@@ -12,3 +12,9 @@ CREATE TABLE "post" (
     dateTime timestamp not null,
     user_id bigint not null references usuario(id)
 )
+
+CREATE TABLE "seguidor" (
+    id bigserial not null primary key,
+    user_id bigint not null references usuario(id),
+    follower_id bigint references usuario(id)
+)
