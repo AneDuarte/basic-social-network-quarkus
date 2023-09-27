@@ -14,9 +14,9 @@ public class Follower extends PanacheEntityBase {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "follower_id")
-    private User followerId;
+    private User follower;
 }

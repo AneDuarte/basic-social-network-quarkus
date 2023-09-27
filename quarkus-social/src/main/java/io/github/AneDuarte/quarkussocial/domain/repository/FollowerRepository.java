@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.lang.reflect.Parameter;
 import java.security.Policy;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,11 +24,16 @@ public class FollowerRepository implements PanacheRepository<Follower> {
         parametros.put("user", user); */
 
         //Modo 2
-        var parametros = Parameters.with("followerId", follower).and("userId", user).map();
+        var parametros = Parameters.with("follower", follower).and("user", user).map();
 
-        PanacheQuery<Follower> query = find("followerId =:followerId and userId =:userId", parametros);
+        PanacheQuery<Follower> query = find("follower =:follower and user =:user", parametros);
         Optional<Follower> resultado = query.firstResultOptional();
 
         return resultado.isPresent();
+    }
+
+    public List<Follower> listarPorUser(Long userId) {
+        PanacheQuery<Follower> query = find("user.id", userId);
+        return query.list();
     }
 }
